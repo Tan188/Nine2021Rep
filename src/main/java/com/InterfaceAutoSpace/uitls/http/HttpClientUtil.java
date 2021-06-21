@@ -20,6 +20,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -32,11 +33,12 @@ public class HttpClientUtil {
     private CloseableHttpClient httpClient;
 
     public static HttpClientResponse doGet(HttpClientRequest httpClientRequest){
-        System.out.println("开始执行");
+        System.out.println("开始执行get请求");
         HttpClientUtil httpClientUtil= new HttpClientUtil();
         httpClientUtil.init();
-        HttpGet httpGet = new HttpGet(httpClientRequest.getUrl());
-        return httpClientUtil.sendRequest(httpGet,httpClientRequest);
+
+        HttpGet get = new HttpGet(httpClientRequest.getUrl());
+        return httpClientUtil.sendRequest(get,httpClientRequest);
     }
 
     public static HttpClientResponse doPost(HttpClientRequest httpClientRequest){
@@ -57,15 +59,17 @@ public class HttpClientUtil {
         HttpClientResponse httpClientResponse = new HttpClientResponse();
         System.out.println("发送请求");
 
-        String url = httpClientRequest.getUrl();
+        //String url = httpClientRequest.getUrl();
         //HttpUriRequest post = new HttpPost(url);
+
 
         Map<String,String> headers = httpClientRequest.getHeaders();
         for(String key:headers.keySet()){
             httpRequestBase.setHeader(key,headers.get(key));
-            headers.get("打印header：");
-            System.out.println(headers.get(key));
+            System.out.println("打印header："+headers.get(key));
         }
+
+
 
         //设置请求body
         try{
@@ -76,6 +80,8 @@ public class HttpClientUtil {
             e1.printStackTrace();
         }
 
+
+
         //发送请求
         try{
             CloseableHttpResponse response = httpClient.execute(httpRequestBase);
@@ -84,7 +90,7 @@ public class HttpClientUtil {
             //statusCode
             String statusCode = response.getStatusLine().toString().split(" ")[1];
             httpClientResponse.setStatusCode(statusCode);
-            System.out.println(statusCode);
+            System.out.println("响应码："+statusCode);
 
 
             //响应header
@@ -98,11 +104,10 @@ public class HttpClientUtil {
 
             //响应body
             HttpEntity entity = response.getEntity();
-            String body = entity.getContent().toString();
+
+            String body = EntityUtils.toString(entity, "utf-8");
             httpClientResponse.setBody(body);
 
-            //logger.info(body);
-            System.out.println(body);
 
             this.close();
 
