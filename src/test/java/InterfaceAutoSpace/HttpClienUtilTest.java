@@ -11,6 +11,7 @@ import java.util.Map;
 public class HttpClienUtilTest {
 
     public static void main(String[] args){
+
         HttpClientRequest request=new HttpClientRequest();
         request.setUrl("https://api.66mz8.com/api/translation.php?info=I%20come%20from%20China&appkey=2d4c769bf1776bb280fa6a567775eea1");
 
@@ -18,8 +19,9 @@ public class HttpClienUtilTest {
         requestHeaders.put("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
         request.setHeaders(requestHeaders);
 
+        request.setBody("{}");
 
-        HttpClientResponse response = HttpClientUtil.doGet(request);
+        HttpClientResponse response = HttpClientUtil.doPost(request);
         System.out.println("响应body:"+response.getBody());
     }
 

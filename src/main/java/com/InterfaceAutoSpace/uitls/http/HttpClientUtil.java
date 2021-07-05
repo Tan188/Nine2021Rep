@@ -42,8 +42,10 @@ public class HttpClientUtil {
     }
 
     public static HttpClientResponse doPost(HttpClientRequest httpClientRequest){
+        System.out.println("开始执行post请求");
         HttpClientUtil httpClientUtil= new HttpClientUtil();
         httpClientUtil.init();
+
         HttpPost httpPost = new HttpPost(httpClientRequest.getUrl());
         return httpClientUtil.sendRequest(httpPost,httpClientRequest);
     }
@@ -57,7 +59,9 @@ public class HttpClientUtil {
 
     private HttpClientResponse sendRequest(HttpRequestBase httpRequestBase, HttpClientRequest httpClientRequest){
         HttpClientResponse httpClientResponse = new HttpClientResponse();
-        System.out.println("发送请求");
+
+        System.out.println("sendRequest方法 ");
+
 
         //String url = httpClientRequest.getUrl();
         //HttpUriRequest post = new HttpPost(url);
@@ -79,6 +83,8 @@ public class HttpClientUtil {
         }catch (UnsupportedEncodingException e1){
             e1.printStackTrace();
         }
+
+        System.out.println("发送请求hahahh ");
 
 
 
@@ -107,6 +113,7 @@ public class HttpClientUtil {
 
             String body = EntityUtils.toString(entity, "utf-8");
             httpClientResponse.setBody(body);
+            System.out.println("body:"+body);
 
 
             this.close();
@@ -129,8 +136,6 @@ public class HttpClientUtil {
             e.printStackTrace();
         }
     }
-
-
 
 
 

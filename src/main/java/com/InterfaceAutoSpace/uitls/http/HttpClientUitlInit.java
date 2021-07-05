@@ -57,17 +57,20 @@ public class HttpClientUitlInit {
 
     public void testMethodPost(){
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        String url = "https://way.jd.com/he/freeweather?city=beijing&appkey=2d4c769bf1776bb280fa6a567775eea1";
+        String url = "https://api.66mz8.com/api/translation.php?info=I%20come%20from%20China&appkey=2d4c769bf1776bb280fa6a567775eea1";
         HttpPost post = new HttpPost(url);
+
         post.setHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
 
+
         try{
-            post.setEntity(new StringEntity("{\"info\":\"i am mary\",\n" +
-                    "\"appkey\":\"2d4c769bf1776bb280fa6a567775eea1\"}"));
+            post.setEntity(new StringEntity("{}"));
 
         }catch (UnsupportedEncodingException e1){
             e1.printStackTrace();
         }
+
+
         try{
 
             CloseableHttpResponse response = httpClient.execute(post);
@@ -78,11 +81,25 @@ public class HttpClientUitlInit {
                 logger.info(header.getName()+":"+ header.getValue());
             }
 
+             /*
             HttpEntity entity = response.getEntity();
-            String body = entity.getContent().toString();
-            //logger.info(body);
+            String result = null;
+            if (entity != null) {
+                result = EntityUtils.toString(entity, "utf-8");
+                System.out.println(result);
+            }
 
+              */
+
+
+            HttpEntity entity = response.getEntity();
+            //String body = entity.getContent().toString();
+            String body = EntityUtils.toString(entity, "utf-8");
+            //logger.info(body);
             System.out.println("body:"+body);
+
+
+
             httpClient.close();
         } catch (ClientProtocolException e){
             e.printStackTrace();
@@ -152,7 +169,7 @@ public class HttpClientUitlInit {
     public static void main(String[] args){
         HttpClientUitlInit util = new HttpClientUitlInit();
         //util.testMethod();
-        //util.testMethodPost();
+        util.testMethodPost();
         HttpClientRequest request=new HttpClientRequest();
         request.setUrl("https://way.jd.com/he/freeweather?city=beijing&appkey=2d4c769bf1776bb280fa6a567775eea1");
 
